@@ -11,7 +11,7 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Yuji+Syuku&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
+    <!-- Icons (Global UMD build for vanilla JS) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -36,7 +36,6 @@
         /* Animations */
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        @keyframes pop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
         
         .animate-spin-slow {
             animation: spin 3s linear infinite;
@@ -68,7 +67,7 @@
     <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent py-6">
         <div class="container mx-auto px-6 flex justify-between items-center relative">
             <!-- Logo -->
-            <a href="#" id="nav-logo" class="nav-text font-black text-xl md:text-2xl tracking-widest heading text-white transition-colors relative z-50">
+            <a href="#" id="nav-logo" class="nav-text font-black text-xl md:text-2xl tracking-widest heading text-white transition-colors relative z-50 decoration-none">
                 サウンド<span id="logo-accent" class="text-yellow-400 transition-colors">オブ</span>ヌードル
             </a>
             
@@ -81,7 +80,7 @@
             </div>
 
             <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden nav-text text-white relative z-50 focus:outline-none">
+            <button id="mobile-menu-btn" class="md:hidden nav-text text-white relative z-50 focus:outline-none" aria-label="Menu">
                 <div class="space-y-1.5">
                     <span class="mobile-line block w-6 h-0.5 bg-white transition-all duration-300"></span>
                     <span class="mobile-line block w-6 h-0.5 bg-white transition-all duration-300"></span>
@@ -111,7 +110,8 @@
             <div class="relative z-10 container mx-auto px-6 h-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
                 <!-- Left Content -->
                 <div class="flex-1 w-full max-w-xl text-center md:text-left order-2 md:order-1">
-                    <div class="inline-flex items-center gap-2 bg-yellow-400 text-black px-6 py-2 font-black transform -rotate-2 mb-8 border-4 border-black shadow-[4px_4px_0px_0px_#000]">
+                    <!-- Desktop Badge (Hidden on Mobile) -->
+                    <div class="hidden md:inline-flex items-center gap-2 bg-yellow-400 text-black px-6 py-2 font-black transform -rotate-2 mb-8 border-4 border-black shadow-[4px_4px_0px_0px_#000]">
                         <i data-lucide="star" class="w-5 h-5 fill-black animate-spin-slow"></i>
                         <span class="tracking-widest text-sm md:text-base">NO RAMEN, NO LIFE.</span>
                     </div>
@@ -146,9 +146,16 @@
                 </div>
 
                 <!-- Right Visuals -->
-                <div class="flex-1 order-1 md:order-2 relative w-full flex justify-center items-center py-10 md:py-0">
+                <div class="flex-1 order-1 md:order-2 relative w-full flex flex-col justify-center items-center py-10 md:py-0">
+                    
+                    <!-- Mobile Badge (Visible on Mobile Only, positioned above image) -->
+                    <div class="md:hidden inline-flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 font-black transform -rotate-2 mb-12 border-4 border-black shadow-[4px_4px_0px_0px_#000] z-30 relative">
+                        <i data-lucide="star" class="w-4 h-4 fill-black animate-spin-slow"></i>
+                        <span class="tracking-widest text-xs">NO RAMEN, NO LIFE.</span>
+                    </div>
+
                     <!-- Modified background text visibility -->
-                    <div class="absolute top-0 right-0 md:-right-20 text-9xl text-black opacity-50 font-black z-0 select-none rotate-12 heading leading-none" style="text-shadow: 4px 4px 0px rgba(255,255,255,0.2);">
+                    <div class="absolute top-0 right-4 md:-right-20 text-6xl md:text-9xl text-black opacity-50 font-black z-0 select-none rotate-12 heading leading-none pointer-events-none" style="text-shadow: 4px 4px 0px rgba(255,255,255,0.2);">
                         轟<br/>音
                     </div>
 
@@ -156,18 +163,20 @@
                         <div class="absolute -inset-10 bg-yellow-400" style="clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); transform: rotate(45deg);"></div>
                         <div class="absolute -inset-6 bg-black" style="clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); transform: rotate(45deg);"></div>
 
-                        <div class="absolute inset-0 overflow-hidden border-8 border-black bg-white shadow-[12px_12px_0px_0px_#000]" style="border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;">
-                            <img src="main_ramen.JPG" alt="Impactful Ramen" class="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700">
+                        <!-- Diamond Shape Container: Rotated 45 deg -->
+                        <div class="absolute inset-0 overflow-hidden border-8 border-black bg-white shadow-[12px_12px_0px_0px_#000] transform rotate-45">
+                            <!-- Inner Image: Rotated -45 deg to be level, scaled to fill corners -->
+                            <img src="main_ramen.JPG" alt="Impactful Ramen" class="w-full h-full object-cover transform -rotate-45 scale-[1.45] hover:scale-[1.6] transition-transform duration-700">
                         </div>
 
                         <!-- Modified Badge -->
-                        <div class="absolute -bottom-8 -right-4 md:bottom-0 md:-right-10 bg-white text-black p-4 w-32 h-32 rounded-full flex flex-col items-center justify-center border-4 border-black shadow-[6px_6px_0px_0px_#000] transform rotate-12">
+                        <div class="absolute -bottom-10 -right-8 md:-bottom-4 md:-right-14 bg-white text-black p-4 w-32 h-32 rounded-full flex flex-col items-center justify-center border-4 border-black shadow-[6px_6px_0px_0px_#000] transform rotate-12 z-20">
                             <span class="text-xs font-black bg-black text-white px-2 py-0.5 mb-1">店主</span>
                             <span class="text-3xl font-black heading">渾身</span>
                             <span class="text-sm font-bold mt-1">の一杯</span>
                         </div>
 
-                        <div class="absolute -top-12 -left-8 bg-black text-white px-6 py-2 text-3xl font-black transform -rotate-6 shadow-[6px_6px_0px_0px_#facc15] border-2 border-white">
+                        <div class="absolute -top-12 -left-8 bg-black text-white px-6 py-2 text-3xl font-black transform -rotate-6 shadow-[6px_6px_0px_0px_#facc15] border-2 border-white z-20">
                             ズズズッ!
                         </div>
                     </div>
@@ -252,15 +261,15 @@
                     <!-- Menu Item 1 -->
                     <div class="group relative bg-white overflow-hidden border-4 border-black shadow-[8px_8px_0px_0px_#000000] hover:shadow-[12px_12px_0px_0px_#facc15] hover:-translate-y-2 transition-all duration-300 rounded-lg">
                         <div class="aspect-video overflow-hidden border-b-4 border-black relative">
-                            <img src="https://images.unsplash.com/photo-1614597396930-cd6760b5b324?q=80&w=800&auto=format&fit=crop" alt="重低音豚骨" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <img src="main_ramen.JPG" alt="濃厚魚介豚骨つけめん" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             <div class="absolute top-0 left-0 bg-yellow-400 text-black text-sm font-black px-4 py-2 border-r-4 border-b-4 border-black">
-                                ド定番
+                                人気No.1
                             </div>
                         </div>
                         <div class="p-6">
                             <div class="flex justify-between items-baseline mb-2">
-                                <h3 class="text-2xl font-black text-black heading">重低音豚骨</h3>
-                                <span class="text-2xl font-black text-red-600 heading">¥1,100</span>
+                                <h3 class="text-xl font-black text-black heading">濃厚魚介豚骨つけめん(200g)</h3>
+                                <span class="text-2xl font-black text-red-600 heading">¥880</span>
                             </div>
                             <p class="text-gray-700 font-bold text-sm mb-4 leading-relaxed">
                                 当店人気No.1！超濃厚な豚骨スープに魚粉をドカンと投入。極太麺がスープを持ち上げ、口の中で暴れまわる！
@@ -273,18 +282,18 @@
                     <!-- Menu Item 2 -->
                     <div class="group relative bg-white overflow-hidden border-4 border-black shadow-[8px_8px_0px_0px_#000000] hover:shadow-[12px_12px_0px_0px_#facc15] hover:-translate-y-2 transition-all duration-300 rounded-lg">
                         <div class="aspect-video overflow-hidden border-b-4 border-black relative">
-                            <img src="https://images.unsplash.com/photo-1552611052-33e04de081de?q=80&w=800&auto=format&fit=crop" alt="鋭角魚介そば" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <img src="main_don.JPG" alt="焼豚玉子飯" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             <div class="absolute top-0 left-0 bg-yellow-400 text-black text-sm font-black px-4 py-2 border-r-4 border-b-4 border-black">
-                                通の味
+                                飯テロ
                             </div>
                         </div>
                         <div class="p-6">
                             <div class="flex justify-between items-baseline mb-2">
-                                <h3 class="text-2xl font-black text-black heading">鋭角魚介そば</h3>
-                                <span class="text-2xl font-black text-red-600 heading">¥1,050</span>
+                                <h3 class="text-2xl font-black text-black heading">焼豚玉子飯(大)</h3>
+                                <span class="text-2xl font-black text-red-600 heading">¥500</span>
                             </div>
                             <p class="text-gray-700 font-bold text-sm mb-4 leading-relaxed">
-                                煮干しオイルがギラつく、キレ味鋭い一杯。醤油の香ばしさと細麺の喉越しが最高にロックだぜ！
+                                禁断の快楽！香ばしいゴロゴロ焼豚とトロトロ玉子が白米の上でセッション。カロリーなんて気にするな、かきこめ！
                             </p>
                             <button class="w-full py-3 bg-black text-white font-black text-lg hover:bg-red-600 transition-colors uppercase tracking-widest">
                                 詳細を見る
@@ -294,18 +303,18 @@
                     <!-- Menu Item 3 -->
                     <div class="group relative bg-white overflow-hidden border-4 border-black shadow-[8px_8px_0px_0px_#000000] hover:shadow-[12px_12px_0px_0px_#facc15] hover:-translate-y-2 transition-all duration-300 rounded-lg">
                         <div class="aspect-video overflow-hidden border-b-4 border-black relative">
-                            <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?q=80&w=800&auto=format&fit=crop" alt="赤色ディストーション" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <img src="main_beer.JPG" alt="瓶ビール" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             <div class="absolute top-0 left-0 bg-yellow-400 text-black text-sm font-black px-4 py-2 border-r-4 border-b-4 border-black">
-                                激辛注意
+                                必須
                             </div>
                         </div>
                         <div class="p-6">
                             <div class="flex justify-between items-baseline mb-2">
-                                <h3 class="text-2xl font-black text-black heading">赤色ディストーション</h3>
-                                <span class="text-2xl font-black text-red-600 heading">¥1,200</span>
+                                <h3 class="text-2xl font-black text-black heading">瓶ビール(黒ラベル)</h3>
+                                <span class="text-2xl font-black text-red-600 heading">¥600</span>
                             </div>
                             <p class="text-gray-700 font-bold text-sm mb-4 leading-relaxed">
-                                特製辛味噌と花椒のシビれが脳天を直撃！汗をかいてデトックス！辛いだけじゃない、旨辛の極み。
+                                大人のガソリン！熱いスープで火照った体をキンキンに冷やす。この喉越し、まさにロック！
                             </p>
                             <button class="w-full py-3 bg-black text-white font-black text-lg hover:bg-red-600 transition-colors uppercase tracking-widest">
                                 詳細を見る
@@ -341,18 +350,18 @@
                     <!-- Item 1 -->
                     <div class="group relative bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:shadow-[12px_12px_0px_0px_#dc2626] hover:-translate-y-2 transition-all duration-300">
                         <div class="relative aspect-square mb-6 border-2 border-black overflow-hidden bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop" alt="爆音Tシャツ (黒)" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" />
+                            <img src="goods_shirts01.JPG" alt="オリジナルTシャツ" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                             <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-black px-3 py-1.5 border-l-2 border-b-2 border-black shadow-[2px_2px_0px_0px_#000]">
-                                一番人気
+                                定番
                             </div>
                         </div>
                         <div class="space-y-3">
-                            <h3 class="text-xl font-black text-black heading leading-tight">爆音Tシャツ (黒)</h3>
+                            <h3 class="text-xl font-black text-black heading leading-tight">オリジナルTシャツ(黒ロゴ)</h3>
                             <p class="text-sm font-bold text-gray-600 leading-relaxed border-b-2 border-dashed border-gray-300 pb-4">
-                                背中に「NO RAMEN NO LIFE」の極太プリント。着るだけで腹が減る！
+                                漆黒のボディに魂のロゴ。これを着れば、お前も「サウンドオブヌードル」のメンバーだ。
                             </p>
                             <div class="flex items-center justify-between pt-1">
-                                <span class="text-3xl font-black text-red-600 heading tracking-tight">¥3,500</span>
+                                <span class="text-3xl font-black text-red-600 heading tracking-tight">¥6,500</span>
                                 <div class="bg-black text-white px-3 py-1 text-xs font-bold transform rotate-3">
                                     店頭のみ
                                 </div>
@@ -362,18 +371,18 @@
                     <!-- Item 2 -->
                     <div class="group relative bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:shadow-[12px_12px_0px_0px_#dc2626] hover:-translate-y-2 transition-all duration-300">
                         <div class="relative aspect-square mb-6 border-2 border-black overflow-hidden bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?q=80&w=800&auto=format&fit=crop" alt="オリジナル雷紋どんぶり" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" />
+                            <img src="goods_sticker.JPG" alt="オリジナルステッカー" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                             <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-black px-3 py-1.5 border-l-2 border-b-2 border-black shadow-[2px_2px_0px_0px_#000]">
-                                残りわずか
+                                お手頃
                             </div>
                         </div>
                         <div class="space-y-3">
-                            <h3 class="text-xl font-black text-black heading leading-tight">オリジナル雷紋どんぶり</h3>
+                            <h3 class="text-xl font-black text-black heading leading-tight">オリジナルステッカー</h3>
                             <p class="text-sm font-bold text-gray-600 leading-relaxed border-b-2 border-dashed border-gray-300 pb-4">
-                                自宅でも爆裂な旨さを。スープを飲み干すと底から「完飲」の文字。
+                                スマホに、PCに、愛車に。どこでも主張激しめな「爆音」ステッカー。貼ればそこがステージになる。
                             </p>
                             <div class="flex items-center justify-between pt-1">
-                                <span class="text-3xl font-black text-red-600 heading tracking-tight">¥2,800</span>
+                                <span class="text-3xl font-black text-red-600 heading tracking-tight">¥280</span>
                                 <div class="bg-black text-white px-3 py-1 text-xs font-bold transform rotate-3">
                                     店頭のみ
                                 </div>
@@ -383,18 +392,18 @@
                     <!-- Item 3 -->
                     <div class="group relative bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:shadow-[12px_12px_0px_0px_#dc2626] hover:-translate-y-2 transition-all duration-300">
                         <div class="relative aspect-square mb-6 border-2 border-black overflow-hidden bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1572375992501-4b0892d50c69?q=80&w=800&auto=format&fit=crop" alt="魂のステッカーセット" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" />
+                            <img src="goods_bag.JPG" alt="オリジナルトート" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                             <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-black px-3 py-1.5 border-l-2 border-b-2 border-black shadow-[2px_2px_0px_0px_#000]">
-                                NEW
+                                便利
                             </div>
                         </div>
                         <div class="space-y-3">
-                            <h3 class="text-xl font-black text-black heading leading-tight">魂のステッカーセット</h3>
+                            <h3 class="text-xl font-black text-black heading leading-tight">オリジナルトート</h3>
                             <p class="text-sm font-bold text-gray-600 leading-relaxed border-b-2 border-dashed border-gray-300 pb-4">
-                                PCに、スマホに、冷蔵庫に。どこでも主張激しめなロゴセット。
+                                麺も入る？A4サイズも余裕の頑丈キャンバス地。日常に「ヌードル」のリズムを持ち運べ！
                             </p>
                             <div class="flex items-center justify-between pt-1">
-                                <span class="text-3xl font-black text-red-600 heading tracking-tight">¥800</span>
+                                <span class="text-3xl font-black text-red-600 heading tracking-tight">¥1,500</span>
                                 <div class="bg-black text-white px-3 py-1 text-xs font-bold transform rotate-3">
                                     店頭のみ
                                 </div>
@@ -437,8 +446,8 @@
                                 <div>
                                     <h3 class="text-xl font-bold mb-1 heading">場所</h3>
                                     <p class="text-gray-300 font-medium">
-                                        〒150-0001<br />
-                                        東京都渋谷区ラーメンストリート1-23-4
+                                        〒761-8053<br />
+                                        香川県高松市西ハゼ町２８４−１
                                     </p>
                                 </div>
                             </div>
@@ -447,13 +456,12 @@
                                 <i data-lucide="clock" class="text-red-500 mt-1 flex-shrink-0 w-8 h-8"></i>
                                 <div>
                                     <h3 class="text-xl font-bold mb-1 heading">営業時間</h3>
-                                    <div class="grid grid-cols-2 gap-x-8 gap-y-2 text-gray-300 font-medium">
-                                        <span class="text-yellow-400 font-bold">月 - 金</span>
-                                        <span>11:00 - 15:00 / 17:00 - 23:00</span>
-                                        <span class="text-yellow-400 font-bold">土 - 日</span>
-                                        <span>11:00 - 23:00 (通し営業)</span>
+                                    <div class="grid grid-cols-1 gap-y-2 text-gray-300 font-medium">
+                                        <div><span class="text-yellow-400 font-bold mr-2">昼営業</span> 11:00 ~ 15:00 (L.O. 14:30)</div>
+                                        <div><span class="text-yellow-400 font-bold mr-2">夜営業</span> 18:00 ~ 21:00 (L.O. 20:30)</div>
+                                        <div class="text-sm mt-1">※火曜日は昼営業のみ</div>
+                                        <div class="text-sm text-red-400 font-bold">※水曜日定休</div>
                                     </div>
-                                    <p class="text-sm text-red-400 mt-2 font-bold">※スープ切れ次第終了！急げ！</p>
                                 </div>
                             </div>
 
@@ -461,7 +469,7 @@
                                 <i data-lucide="phone" class="text-red-500 mt-1 flex-shrink-0 w-8 h-8"></i>
                                 <div>
                                     <h3 class="text-xl font-bold mb-1 heading">連絡先</h3>
-                                    <p class="text-gray-300 font-bold text-lg">03-1234-5678</p>
+                                    <p class="text-gray-300 font-bold text-lg">087-884-0601</p>
                                 </div>
                             </div>
                         </div>
@@ -469,7 +477,7 @@
 
                     <div class="w-full md:w-1/2 h-[400px] bg-white relative border-4 border-white shadow-xl rounded-xl overflow-hidden">
                         <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6590.538726949263!2d134.029525576186!3d34.318158903641745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3553ebc9d140ff0f%3A0xc422102014093e0f!2z44K144Km44Oz44OJ44Kq44OW44OM44O844OJ44Or!5e0!3m2!1sja!2sjp!4v1768209002187!5m2!1sja!2sjp" 
+                            src="https://maps.google.com/maps?q=香川県高松市西ハゼ町２８４−１&t=&z=15&ie=UTF8&iwloc=&output=embed" 
                             width="100%" 
                             height="100%" 
                             style="border:0" 
@@ -502,128 +510,140 @@
     </footer>
 
     <script>
-        // Initialize Icons
-        lucide.createIcons();
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Icons
+            lucide.createIcons();
 
-        // Scroll Logic for Navbar Style
-        const navbar = document.getElementById('navbar');
-        const navTextElements = document.querySelectorAll('.nav-text');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const logoAccent = document.getElementById('logo-accent');
-        const mobileLines = document.querySelectorAll('.mobile-line');
-        const mobileAccent = document.getElementById('mobile-accent');
+            // Navbar Elements
+            const navbar = document.getElementById('navbar');
+            const navTextElements = document.querySelectorAll('.nav-text');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const logoAccent = document.getElementById('logo-accent');
+            
+            // Mobile Menu Elements
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = document.querySelectorAll('.mobile-link');
+            const mobileLines = document.querySelectorAll('.mobile-line');
+            const mobileAccentLine = document.getElementById('mobile-accent');
+            
+            let isMenuOpen = false;
 
-        function updateNavbar() {
-            const isScrolled = window.scrollY > 50;
-            // Only update colors if mobile menu is closed to prevent conflict
-            if (isMenuOpen) return;
+            // Scroll Logic for Navbar Style
+            function updateNavbar() {
+                const isScrolled = window.scrollY > 50;
+                // Only update colors if mobile menu is closed to prevent conflict
+                if (isMenuOpen) return;
 
-            if (isScrolled) {
-                // Navbar Background
-                navbar.classList.remove('bg-transparent', 'py-6');
-                navbar.classList.add('bg-white', 'shadow-lg', 'py-3');
-                
-                // Text Colors
-                navTextElements.forEach(el => {
-                    el.classList.remove('text-white');
-                    el.classList.add('text-black');
-                });
+                if (isScrolled) {
+                    // Navbar Background
+                    navbar.classList.remove('bg-transparent', 'py-6');
+                    navbar.classList.add('bg-white', 'shadow-lg', 'py-3');
+                    
+                    // Text Colors
+                    navTextElements.forEach(el => {
+                        el.classList.remove('text-white');
+                        el.classList.add('text-black');
+                    });
 
-                // Nav Links
-                navLinks.forEach(el => {
-                    el.classList.remove('text-white', 'hover:text-yellow-400');
-                    el.classList.add('text-black', 'hover:text-red-600');
-                });
+                    // Nav Links
+                    navLinks.forEach(el => {
+                        el.classList.remove('text-white', 'hover:text-yellow-400');
+                        el.classList.add('text-black', 'hover:text-red-600');
+                    });
 
-                // Logo Accent
-                logoAccent.classList.remove('text-yellow-400');
-                logoAccent.classList.add('text-red-600');
+                    // Logo Accent
+                    logoAccent.classList.remove('text-yellow-400');
+                    logoAccent.classList.add('text-red-600');
 
-                // Mobile Menu Lines
-                mobileLines.forEach(el => {
-                    el.classList.remove('bg-white');
-                    el.classList.add('bg-black');
-                });
-                mobileAccent.classList.remove('bg-yellow-400');
-                mobileAccent.classList.add('bg-red-600');
+                    // Mobile Menu Lines
+                    mobileLines.forEach(el => {
+                        el.classList.remove('bg-white');
+                        el.classList.add('bg-black');
+                    });
+                    mobileAccentLine.classList.remove('bg-yellow-400');
+                    mobileAccentLine.classList.add('bg-red-600');
 
-            } else {
-                // Navbar Background
-                navbar.classList.add('bg-transparent', 'py-6');
-                navbar.classList.remove('bg-white', 'shadow-lg', 'py-3');
-                
-                // Text Colors
-                navTextElements.forEach(el => {
-                    el.classList.add('text-white');
-                    el.classList.remove('text-black');
-                });
+                } else {
+                    // Navbar Background
+                    navbar.classList.add('bg-transparent', 'py-6');
+                    navbar.classList.remove('bg-white', 'shadow-lg', 'py-3');
+                    
+                    // Text Colors
+                    navTextElements.forEach(el => {
+                        el.classList.add('text-white');
+                        el.classList.remove('text-black');
+                    });
 
-                // Nav Links
-                navLinks.forEach(el => {
-                    el.classList.add('text-white', 'hover:text-yellow-400');
-                    el.classList.remove('text-black', 'hover:text-red-600');
-                });
+                    // Nav Links
+                    navLinks.forEach(el => {
+                        el.classList.add('text-white', 'hover:text-yellow-400');
+                        el.classList.remove('text-black', 'hover:text-red-600');
+                    });
 
-                // Logo Accent
-                logoAccent.classList.add('text-yellow-400');
-                logoAccent.classList.remove('text-red-600');
+                    // Logo Accent
+                    logoAccent.classList.add('text-yellow-400');
+                    logoAccent.classList.remove('text-red-600');
 
-                // Mobile Menu Lines
-                mobileLines.forEach(el => {
-                    el.classList.add('bg-white');
-                    el.classList.remove('bg-black');
-                });
-                mobileAccent.classList.add('bg-yellow-400');
-                mobileAccent.classList.remove('bg-red-600');
+                    // Mobile Menu Lines
+                    mobileLines.forEach(el => {
+                        el.classList.add('bg-white');
+                        el.classList.remove('bg-black');
+                    });
+                    mobileAccentLine.classList.add('bg-yellow-400');
+                    mobileAccentLine.classList.remove('bg-red-600');
+                }
             }
-        }
 
-        window.addEventListener('scroll', updateNavbar);
+            window.addEventListener('scroll', updateNavbar);
+            updateNavbar(); // Initial check
 
-        // Mobile Menu Logic
-        const mobileBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuLinks = document.querySelectorAll('.mobile-link');
-        const mobileAccentLine = document.getElementById('mobile-accent');
-        let isMenuOpen = false;
+            // Mobile Menu Logic
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                if (isMenuOpen) {
+                    mobileMenu.classList.remove('translate-x-full');
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Animate Hamburger to X
+                    mobileLines[0].style.transform = 'rotate(45deg) translate(5px, 6px)';
+                    mobileLines[1].style.opacity = '0';
+                    mobileAccentLine.style.transform = 'rotate(-45deg) translate(5px, -6px)';
+                    mobileAccentLine.style.width = '1.5rem'; // w-6
+                    
+                    // Force white color for button when menu is open (on dark background)
+                    mobileLines.forEach(l => {
+                        l.classList.remove('bg-black');
+                        l.classList.add('bg-white');
+                    });
+                    mobileAccentLine.classList.remove('bg-red-600');
+                    mobileAccentLine.classList.add('bg-yellow-400');
 
-        function toggleMenu() {
-            isMenuOpen = !isMenuOpen;
-            if (isMenuOpen) {
-                mobileMenu.classList.remove('translate-x-full');
-                document.body.style.overflow = 'hidden';
-                
-                // Animate Hamburger to X
-                mobileLines[0].style.transform = 'rotate(45deg) translate(5px, 6px)';
-                mobileLines[1].style.opacity = '0';
-                mobileAccentLine.style.transform = 'rotate(-45deg) translate(5px, -6px)';
-                mobileAccentLine.style.width = '1.5rem'; // w-6
-                
-                // Force white color for button when menu is open (on dark background)
-                mobileLines.forEach(l => l.classList.remove('bg-black'));
-                mobileLines.forEach(l => l.classList.add('bg-white'));
-                mobileAccentLine.classList.remove('bg-red-600');
-                mobileAccentLine.classList.add('bg-yellow-400');
+                } else {
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.style.overflow = '';
 
-            } else {
-                mobileMenu.classList.add('translate-x-full');
-                document.body.style.overflow = '';
+                    // Reset Hamburger
+                    mobileLines[0].style.transform = '';
+                    mobileLines[1].style.opacity = '1';
+                    mobileAccentLine.style.transform = '';
+                    mobileAccentLine.style.width = '1rem'; // w-4
 
-                // Reset Hamburger
-                mobileLines[0].style.transform = '';
-                mobileLines[1].style.opacity = '1';
-                mobileAccentLine.style.transform = '';
-                mobileAccentLine.style.width = '1rem'; // w-4
-
-                // Re-apply scroll-based colors immediately
-                updateNavbar();
+                    // Re-apply scroll-based colors immediately
+                    updateNavbar();
+                }
             }
-        }
 
-        mobileBtn.addEventListener('click', toggleMenu);
+            if (mobileBtn) {
+                mobileBtn.addEventListener('click', toggleMenu);
+            }
 
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', toggleMenu);
+            // Close menu when a link is clicked
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (isMenuOpen) toggleMenu();
+                });
+            });
         });
     </script>
 </body>
