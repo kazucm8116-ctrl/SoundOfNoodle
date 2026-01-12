@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" style="scroll-behavior: smooth; scroll-padding-top: 80px;">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -44,13 +44,18 @@
         .animate-float {
             animation: float 6s ease-in-out infinite;
         }
+        
+        /* Mobile Menu Transition */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+        }
     </style>
 <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
     "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
     "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
   }
@@ -61,11 +66,11 @@
 
     <!-- Sticky Nav -->
     <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent py-6">
-        <div class="container mx-auto px-6 flex justify-between items-center">
+        <div class="container mx-auto px-6 flex justify-between items-center relative">
             <!-- Logo -->
-            <div id="nav-logo" class="nav-text font-black text-xl md:text-2xl tracking-widest heading text-white transition-colors">
+            <a href="#" id="nav-logo" class="nav-text font-black text-xl md:text-2xl tracking-widest heading text-white transition-colors relative z-50">
                 サウンド<span id="logo-accent" class="text-yellow-400 transition-colors">オブ</span>ヌードル
-            </div>
+            </a>
             
             <!-- Desktop Menu -->
             <div class="hidden md:flex gap-8 text-sm font-bold tracking-widest">
@@ -76,13 +81,21 @@
             </div>
 
             <!-- Mobile Menu Button -->
-            <button class="md:hidden nav-text text-white">
+            <button id="mobile-menu-btn" class="md:hidden nav-text text-white relative z-50 focus:outline-none">
                 <div class="space-y-1.5">
-                    <span class="mobile-line block w-6 h-0.5 bg-white transition-colors"></span>
-                    <span class="mobile-line block w-6 h-0.5 bg-white transition-colors"></span>
-                    <span id="mobile-accent" class="block w-4 h-0.5 bg-yellow-400 ml-auto transition-colors"></span>
+                    <span class="mobile-line block w-6 h-0.5 bg-white transition-all duration-300"></span>
+                    <span class="mobile-line block w-6 h-0.5 bg-white transition-all duration-300"></span>
+                    <span id="mobile-accent" class="block w-4 h-0.5 bg-yellow-400 ml-auto transition-all duration-300"></span>
                 </div>
             </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-sm z-40 transform translate-x-full flex flex-col items-center justify-center gap-8 md:hidden">
+            <a href="#about" class="mobile-link text-3xl font-black text-white hover:text-yellow-400 transition-colors heading">哲学</a>
+            <a href="#menu" class="mobile-link text-3xl font-black text-white hover:text-yellow-400 transition-colors heading">お品書き</a>
+            <a href="#goods" class="mobile-link text-3xl font-black text-white hover:text-yellow-400 transition-colors heading">物販</a>
+            <a href="#access" class="mobile-link text-3xl font-black text-white hover:text-yellow-400 transition-colors heading">アクセス</a>
         </div>
     </nav>
 
@@ -144,7 +157,7 @@
                         <div class="absolute -inset-6 bg-black" style="clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); transform: rotate(45deg);"></div>
 
                         <div class="absolute inset-0 overflow-hidden border-8 border-black bg-white shadow-[12px_12px_0px_0px_#000]" style="border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;">
-                            <img src="https://images.unsplash.com/photo-1569937728357-4071d9d561a4?q=80&w=800&auto=format&fit=crop" alt="Impactful Ramen" class="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700">
+                            <img src="main_ramen.JPG" alt="Impactful Ramen" class="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700">
                         </div>
 
                         <!-- Modified Badge -->
@@ -492,7 +505,7 @@
         // Initialize Icons
         lucide.createIcons();
 
-        // Scroll Logic
+        // Scroll Logic for Navbar Style
         const navbar = document.getElementById('navbar');
         const navTextElements = document.querySelectorAll('.nav-text');
         const navLinks = document.querySelectorAll('.nav-link');
@@ -500,15 +513,17 @@
         const mobileLines = document.querySelectorAll('.mobile-line');
         const mobileAccent = document.getElementById('mobile-accent');
 
-        window.addEventListener('scroll', () => {
+        function updateNavbar() {
             const isScrolled = window.scrollY > 50;
-            
+            // Only update colors if mobile menu is closed to prevent conflict
+            if (isMenuOpen) return;
+
             if (isScrolled) {
                 // Navbar Background
                 navbar.classList.remove('bg-transparent', 'py-6');
                 navbar.classList.add('bg-white', 'shadow-lg', 'py-3');
                 
-                // Text Colors (Logos etc.)
+                // Text Colors
                 navTextElements.forEach(el => {
                     el.classList.remove('text-white');
                     el.classList.add('text-black');
@@ -520,7 +535,7 @@
                     el.classList.add('text-black', 'hover:text-red-600');
                 });
 
-                // Logo Accent "オブ"
+                // Logo Accent
                 logoAccent.classList.remove('text-yellow-400');
                 logoAccent.classList.add('text-red-600');
 
@@ -549,7 +564,7 @@
                     el.classList.remove('text-black', 'hover:text-red-600');
                 });
 
-                // Logo Accent "オブ"
+                // Logo Accent
                 logoAccent.classList.add('text-yellow-400');
                 logoAccent.classList.remove('text-red-600');
 
@@ -561,6 +576,54 @@
                 mobileAccent.classList.add('bg-yellow-400');
                 mobileAccent.classList.remove('bg-red-600');
             }
+        }
+
+        window.addEventListener('scroll', updateNavbar);
+
+        // Mobile Menu Logic
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuLinks = document.querySelectorAll('.mobile-link');
+        const mobileAccentLine = document.getElementById('mobile-accent');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
+                
+                // Animate Hamburger to X
+                mobileLines[0].style.transform = 'rotate(45deg) translate(5px, 6px)';
+                mobileLines[1].style.opacity = '0';
+                mobileAccentLine.style.transform = 'rotate(-45deg) translate(5px, -6px)';
+                mobileAccentLine.style.width = '1.5rem'; // w-6
+                
+                // Force white color for button when menu is open (on dark background)
+                mobileLines.forEach(l => l.classList.remove('bg-black'));
+                mobileLines.forEach(l => l.classList.add('bg-white'));
+                mobileAccentLine.classList.remove('bg-red-600');
+                mobileAccentLine.classList.add('bg-yellow-400');
+
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                document.body.style.overflow = '';
+
+                // Reset Hamburger
+                mobileLines[0].style.transform = '';
+                mobileLines[1].style.opacity = '1';
+                mobileAccentLine.style.transform = '';
+                mobileAccentLine.style.width = '1rem'; // w-4
+
+                // Re-apply scroll-based colors immediately
+                updateNavbar();
+            }
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
         });
     </script>
 </body>
