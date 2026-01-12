@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sound of Noodle | サウンドオブヌードル</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Yuji+Syuku&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #dc2626; /* Vibrant Red Base */
+            color: #171717;
+        }
+        h1, h2, h3, .heading {
+            font-family: 'Yuji Syuku', serif;
+            font-weight: 400;
+        }
+        /* Manga-style speed lines background pattern */
+        .bg-pattern {
+            background-color: #dc2626;
+            background-image: radial-gradient(#ef4444 20%, transparent 20%),
+                              radial-gradient(#ef4444 20%, transparent 20%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        /* Animations */
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        @keyframes pop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        
+        .animate-spin-slow {
+            animation: spin 3s linear infinite;
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+</head>
+<body class="bg-pattern overflow-x-hidden selection:bg-yellow-400 selection:text-black">
+
+    <!-- Sticky Nav -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent py-6">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <!-- Logo -->
+            <div id="nav-logo" class="nav-text font-black text-xl md:text-2xl tracking-widest heading text-white transition-colors">
+                サウンド<span id="logo-accent" class="text-yellow-400 transition-colors">オブ</span>ヌードル
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex gap-8 text-sm font-bold tracking-widest">
+                <a href="#about" class="nav-link text-white hover:text-yellow-400 transition-colors heading">哲学</a>
+                <a href="#menu" class="nav-link text-white hover:text-yellow-400 transition-colors heading">お品書き</a>
+                <a href="#goods" class="nav-link text-white hover:text-yellow-400 transition-colors heading">物販</a>
+                <a href="#access" class="nav-link text-white hover:text-yellow-400 transition-colors heading">アクセス</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden nav-text text-white">
+                <div class="space-y-1.5">
+                    <span class="mobile-line block w-6 h-0.5 bg-white transition-colors"></span>
+                    <span class="mobile-line block w-6 h-0.5 bg-white transition-colors"></span>
+                    <span id="mobile-accent" class="block w-4 h-0.5 bg-yellow-400 ml-auto transition-colors"></span>
+                </div>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative min-h-screen w-full overflow-hidden bg-[#dc2626] flex flex-col items-center justify-center pt-20 pb-10">
+            <!-- Background Effects -->
+            <div class="absolute inset-0 z-0 pointer-events-none flex items-center justify-center overflow-hidden">
+                <div class="w-[200vw] h-[200vw] opacity-10" style="background: repeating-conic-gradient(#000 0deg 15deg, transparent 15deg 30deg); animation: spin 60s linear infinite;"></div>
+                <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#000_2px,transparent_2px)] [background-size:16px_16px]"></div>
+            </div>
+
+            <div class="relative z-10 container mx-auto px-6 h-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+                <!-- Left Content -->
+                <div class="flex-1 w-full max-w-xl text-center md:text-left order-2 md:order-1">
+                    <div class="inline-flex items-center gap-2 bg-yellow-400 text-black px-6 py-2 font-black transform -rotate-2 mb-8 border-4 border-black shadow-[4px_4px_0px_0px_#000]">
+                        <i data-lucide="star" class="w-5 h-5 fill-black animate-spin-slow"></i>
+                        <span class="tracking-widest text-sm md:text-base">NO RAMEN, NO LIFE.</span>
+                    </div>
+
+                    <h1 class="text-6xl sm:text-7xl md:text-9xl font-black text-white leading-[0.85] tracking-tighter mb-6 relative z-10" style="text-shadow: 6px 6px 0px #000;">
+                        SOUND<br/>
+                        <span class="text-yellow-400 inline-block transform hover:scale-110 transition-transform cursor-default" style="text-shadow: 6px 6px 0px #000;">OF</span><br/>
+                        NOODLE
+                    </h1>
+
+                    <div class="relative inline-block mb-10 transform -rotate-1">
+                        <div class="absolute -inset-2 bg-black transform skew-x-12 shadow-[4px_4px_0px_0px_#fff]"></div>
+                        <h2 class="relative text-2xl md:text-4xl font-black text-white heading px-4 py-1">
+                            音で食わせる、<span class="text-yellow-400">爆裂魚介豚骨。</span>
+                        </h2>
+                    </div>
+
+                    <p class="text-white font-bold mb-10 text-sm md:text-lg leading-relaxed max-w-md mx-auto md:mx-0 drop-shadow-md">
+                        理屈はいらない。必要なのは「食欲」と「勢い」だけ。<br/>
+                        丼の中から響き渡る、魚介と豚骨のセッションを体感せよ！
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <a href="#menu" class="group relative bg-white text-black px-10 py-5 font-black text-xl uppercase tracking-widest border-4 border-black shadow-[8px_8px_0px_0px_#000] hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#000] hover:bg-yellow-400 transition-all flex items-center justify-center gap-3">
+                            <span class="heading">お品書き</span>
+                            <i data-lucide="arrow-right" class="group-hover:translate-x-2 transition-transform"></i>
+                        </a>
+                        <a href="#access" class="group relative bg-black text-white px-10 py-5 font-black text-xl uppercase tracking-widest border-4 border-white shadow-[8px_8px_0px_0px_#fff] hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_#fff] transition-all flex items-center justify-center">
+                            <span class="heading">場所</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Visuals -->
+                <div class="flex-1 order-1 md:order-2 relative w-full flex justify-center items-center py-10 md:py-0">
+                    <div class="absolute top-0 right-0 md:-right-20 text-9xl text-black opacity-20 font-black z-0 select-none rotate-12 heading leading-none">
+                        轟<br/>音
+                    </div>
+
+                    <div class="relative w-[300px] h-[300px] sm:w-[450px] sm:h-[450px] animate-float z-10">
+                        <div class="absolute -inset-10 bg-yellow-400" style="clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); transform: rotate(45deg);"></div>
+                        <div class="absolute -inset-6 bg-black" style="clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); transform: rotate(45deg);"></div>
+
+                        <div class="absolute inset-0 overflow-hidden border-8 border-black bg-white shadow-[12px_12px_0px_0px_#000]" style="border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;">
+                            <img src="https://images.unsplash.com/photo-1569937728357-4071d9d561a4?q=80&w=800&auto=format&fit=crop" alt="Impactful Ramen" class="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700">
+                        </div>
+
+                        <div class="absolute -bottom-8 -right-4 md:bottom-0 md:-right-10 bg-white text-black p-4 w-32 h-32 rounded-full flex flex-col items-center justify-center border-4 border-black shadow-[6px_6px_0px_0px_#000] transform rotate-12 hover:rotate-0 transition-transform cursor-pointer group hover:bg-yellow-400">
+                            <span class="text-xs font-black bg-black text-white px-2 py-0.5 mb-1">本日の</span>
+                            <span class="text-3xl font-black heading group-hover:scale-110 transition-transform">激推し</span>
+                            <i data-lucide="volume-2" class="mt-1 w-6 h-6"></i>
+                        </div>
+
+                        <div class="absolute -top-12 -left-8 bg-black text-white px-6 py-2 text-3xl font-black transform -rotate-6 shadow-[6px_6px_0px_0px_#facc15] border-2 border-white">
+                            ズズズッ!
+                        </div>
+                    </div>
+                </div>
+            </div>  
+
+            <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce text-white drop-shadow-[0_2px_0_#000]">
+                <i data-lucide="chevron-down" class="w-10 h-10" stroke-width="4"></i>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-24 bg-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-full h-full opacity-5 pointer-events-none" style="background-image: repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 0, transparent 50%); background-size: 20px 20px;"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="flex flex-col md:flex-row gap-16 items-center">
+                    <div class="w-full md:w-1/2">
+                        <h2 class="text-5xl md:text-7xl font-bold text-black mb-8 heading leading-tight">
+                            喰らえ、<br/>
+                            <span class="text-red-600 drop-shadow-sm">魂の爆音。</span>
+                        </h2>
+                        <div class="space-y-6 text-gray-800 text-lg font-medium leading-loose">
+                            <p>
+                                静かに食べるラーメンなんてつまらない！<br/>
+                                <span class="font-bold text-red-600 text-xl">サウンドオブヌードル</span>は、活気と情熱がぶつかり合う食のライブハウスだ！
+                            </p>
+                            <p>
+                                濃厚ド直球の<span class="bg-red-100 px-2 py-1 rounded">豚骨ベース</span>に、キレッキレの<span class="bg-blue-100 px-2 py-1 rounded">魚介ダシ</span>が炸裂する。
+                                男なら黙って「全部のせ」！細かい理屈は抜きにして、本能で啜れ！
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+                            <div class="bg-red-50 p-6 border-2 border-red-200 rounded-xl hover:shadow-xl transition-shadow transform hover:-translate-y-1">
+                                <i data-lucide="music" class="text-red-600 mb-4 w-10 h-10"></i>
+                                <h3 class="text-xl font-bold text-red-700 mb-2 heading">魚介のキレ</h3>
+                                <p class="text-sm text-gray-700 font-bold">煮干しがガツン！目が覚めるような衝撃。</p>
+                            </div>
+                            <div class="bg-red-50 p-6 border-2 border-red-200 rounded-xl hover:shadow-xl transition-shadow transform hover:-translate-y-1">
+                                <i data-lucide="zap" class="text-red-600 mb-4 w-10 h-10"></i>
+                                <h3 class="text-xl font-bold text-red-700 mb-2 heading">豚骨のコク</h3>
+                                <p class="text-sm text-gray-700 font-bold">48時間強火炊き！骨の髄まで旨味凝縮。</p>
+                            </div>
+                            <div class="bg-red-50 p-6 border-2 border-red-200 rounded-xl hover:shadow-xl transition-shadow transform hover:-translate-y-1">
+                                <i data-lucide="waves" class="text-red-600 mb-4 w-10 h-10"></i>
+                                <h3 class="text-xl font-bold text-red-700 mb-2 heading">Wスープ</h3>
+                                <p class="text-sm text-gray-700 font-bold">二つの個性が丼の中で大爆発！</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/2 relative">
+                        <div class="relative aspect-square overflow-hidden border-8 border-black shadow-[16px_16px_0px_0px_#dc2626] transform rotate-3">
+                            <img src="https://images.unsplash.com/photo-1569937756447-e19888db8f73?q=80&w=1000&auto=format&fit=crop" alt="Ramen Master" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                            <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-6">
+                                <p class="text-yellow-400 font-black text-3xl heading tracking-wider drop-shadow-md">
+                                    大将 / ケンジ "THE BEAT"
+                                </p>
+                                <p class="text-white font-bold">「一杯入魂！残さず食えよ！」</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu" class="py-24 bg-red-600 relative">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_white_1px,_transparent_1px)] bg-[length:24px_24px]"></div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="text-6xl font-black text-white heading mb-4 drop-shadow-[4px_4px_0px_#000]">
+                        演目 (メニュー)
+                    </h2>
+                    <div class="inline-block bg-yellow-400 text-black font-bold px-6 py-2 transform -rotate-2 border-2 border-black">
+                        魂込めて作ってます！
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Menu Item 1 -->
+                    <div class="group relative bg-white overflow-hidden border-4 border-black shadow-[8px_8px_0px_0px_#000000] hover:shadow-[12px_12px_0px_0px_#facc15] hover:-translate-y-2 transition-all duration-300 rounded-lg">
+                        <div class="aspect-video overflow-hidden border-b-4 border-black relative">
+                            <img src="https://images.unsplash.com/photo-1614597396930-cd6760b5b324?q=80&w=800&auto=format&fit=crop" alt="重低音豚骨" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute top-0 left-0 bg-yellow-400 text-black text-sm font-black px-4 py-2 border-r-4 border-b-4 border-black">
+                                ド定番
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-baseline mb-2">
+                                <h3 class="text-2xl font-black text-black heading">重低音豚骨</h3>
+                                <span class="text-2xl font-black text-red-600 heading">¥1,100</span>
+                            </div>
+                            <p class="text-gray-700 font-bold text-sm mb-4 leading-relaxed">
+                                当店人気No.1！超濃厚な豚骨スープに魚粉をドカンと投入。極太麺がスープを持ち上げ、口の中で暴れまわる！
+                            </p>
+                            <button class="w-full py-3 bg-black text-white font-black text-lg hover:bg-red-600 transition-colors uppercase tracking-widest">
+                                詳細を見る
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Menu Item 2 -->
+                    <div class="group relative bg-white overflow-hidden border-4 border-black shadow-[8px_8px_0px_0px_#000000] hover:shadow-[12px_12px_0px_0px_#facc15] hover:-translate-y-2 transition-all duration-300 rounded-lg">
+                        <div class="aspect-video overflow-hidden border-b-4 border-black relative">
+                            <img src="https://images.unsplash.com/photo-1552611052-33e04de081de?q=80&w=800&auto=format&fit=crop" alt="鋭角魚介そば" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute top-0 left-0 bg-yellow-400 text-black text-sm font-black px-4 py-2 border-r-4 border-b-4 border-black">
+                                通の味
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-baseline mb-2">
+                                <h3 class="text-2xl font-black text-black heading">鋭角魚介そば</h3>
+                                <span class="text-2xl font-black text-red-600 heading">¥1,050</span>
+                            </div>
+                            <p class="text-gray-700 font-bold text-sm mb-4 leading-relaxed">
+                                煮干しオイルがギラつく、キレ味鋭い一杯。醤油の香ばしさと細麺の喉越しが最高にロックだぜ！
+                            </p>
+                            <button class="w-full py-3 bg-black text-white font-black text-lg hover:bg-red-600 transition-colors uppercase tracking-widest">
+                                詳細を見る
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Menu Item 3 -->
+                    <div class="group relative bg-white overflow-hidden border-4 border-black shadow-[8px_8px_0px_0px_#000000] hover:shadow-[12px_12px_0px_0px_#facc15] hover:-translate-y-2 transition-all duration-300 rounded-lg">
+                        <div class="aspect-video overflow-hidden border-b-4 border-black relative">
+                            <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?q=80&w=800&auto=format&fit=crop" alt="赤色ディストーション" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute top-0 left-0 bg-yellow-400 text-black text-sm font-black px-4 py-2 border-r-4 border-b-4 border-black">
+                                激辛注意
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-baseline mb-2">
+                                <h3 class="text-2xl font-black text-black heading">赤色ディストーション</h3>
+                                <span class="text-2xl font-black text-red-600 heading">¥1,200</span>
+                            </div>
+                            <p class="text-gray-700 font-bold text-sm mb-4 leading-relaxed">
+                                特製辛味噌と花椒のシビれが脳天を直撃！汗をかいてデトックス！辛いだけじゃない、旨辛の極み。
+                            </p>
+                            <button class="w-full py-3 bg-black text-white font-black text-lg hover:bg-red-600 transition-colors uppercase tracking-widest">
+                                詳細を見る
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Goods Section (In-Store Only) -->
+        <section id="goods" class="py-24 bg-[#fbbf24] border-y-8 border-black relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#000 2px, transparent 2px); background-size: 16px 16px;"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <!-- Header -->
+                <div class="flex flex-col items-center text-center mb-16">
+                    <div class="flex items-center gap-3 bg-black text-white px-6 py-2 transform -rotate-2 shadow-[4px_4px_0px_0px_#fff] mb-6">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        <span class="font-black tracking-widest text-lg">OFFICIAL MERCH</span>
+                    </div>
+                    <h2 class="text-5xl md:text-7xl font-black text-black heading mb-6 drop-shadow-[2px_2px_0px_#fff]">
+                        公式物販
+                    </h2>
+                    <p class="text-lg md:text-xl font-bold text-black max-w-2xl leading-relaxed bg-white/50 p-2 backdrop-blur-sm">
+                        食うだけじゃ足りない？<br/>
+                        なら<span class="bg-red-600 text-white px-1 mx-1">身に纏え！</span> サウンドオブヌードルの魂を！
+                    </p>
+                </div>
+
+                <!-- Goods Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                    <!-- Item 1 -->
+                    <div class="group relative bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:shadow-[12px_12px_0px_0px_#dc2626] hover:-translate-y-2 transition-all duration-300">
+                        <div class="relative aspect-square mb-6 border-2 border-black overflow-hidden bg-gray-100">
+                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop" alt="爆音Tシャツ (黒)" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" />
+                            <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-black px-3 py-1.5 border-l-2 border-b-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                                一番人気
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <h3 class="text-xl font-black text-black heading leading-tight">爆音Tシャツ (黒)</h3>
+                            <p class="text-sm font-bold text-gray-600 leading-relaxed border-b-2 border-dashed border-gray-300 pb-4">
+                                背中に「NO RAMEN NO LIFE」の極太プリント。着るだけで腹が減る！
+                            </p>
+                            <div class="flex items-center justify-between pt-1">
+                                <span class="text-3xl font-black text-red-600 heading tracking-tight">¥3,500</span>
+                                <div class="bg-black text-white px-3 py-1 text-xs font-bold transform rotate-3">
+                                    店頭のみ
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="group relative bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:shadow-[12px_12px_0px_0px_#dc2626] hover:-translate-y-2 transition-all duration-300">
+                        <div class="relative aspect-square mb-6 border-2 border-black overflow-hidden bg-gray-100">
+                            <img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?q=80&w=800&auto=format&fit=crop" alt="オリジナル雷紋どんぶり" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" />
+                            <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-black px-3 py-1.5 border-l-2 border-b-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                                残りわずか
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <h3 class="text-xl font-black text-black heading leading-tight">オリジナル雷紋どんぶり</h3>
+                            <p class="text-sm font-bold text-gray-600 leading-relaxed border-b-2 border-dashed border-gray-300 pb-4">
+                                自宅でも爆裂な旨さを。スープを飲み干すと底から「完飲」の文字。
+                            </p>
+                            <div class="flex items-center justify-between pt-1">
+                                <span class="text-3xl font-black text-red-600 heading tracking-tight">¥2,800</span>
+                                <div class="bg-black text-white px-3 py-1 text-xs font-bold transform rotate-3">
+                                    店頭のみ
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="group relative bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:shadow-[12px_12px_0px_0px_#dc2626] hover:-translate-y-2 transition-all duration-300">
+                        <div class="relative aspect-square mb-6 border-2 border-black overflow-hidden bg-gray-100">
+                            <img src="https://images.unsplash.com/photo-1572375992501-4b0892d50c69?q=80&w=800&auto=format&fit=crop" alt="魂のステッカーセット" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" />
+                            <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-black px-3 py-1.5 border-l-2 border-b-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                                NEW
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <h3 class="text-xl font-black text-black heading leading-tight">魂のステッカーセット</h3>
+                            <p class="text-sm font-bold text-gray-600 leading-relaxed border-b-2 border-dashed border-gray-300 pb-4">
+                                PCに、スマホに、冷蔵庫に。どこでも主張激しめなロゴセット。
+                            </p>
+                            <div class="flex items-center justify-between pt-1">
+                                <span class="text-3xl font-black text-red-600 heading tracking-tight">¥800</span>
+                                <div class="bg-black text-white px-3 py-1 text-xs font-bold transform rotate-3">
+                                    店頭のみ
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="mt-20 flex flex-col items-center">
+                    <div class="relative w-full max-w-2xl bg-black text-yellow-400 p-6 border-4 border-white shadow-[8px_8px_0px_0px_#dc2626] text-center transform -rotate-1 mb-10">
+                        <div class="absolute -top-4 -left-4 bg-red-600 text-white p-2 border-2 border-black animate-bounce">
+                            <i data-lucide="alert-triangle" class="w-8 h-8" stroke-width="3"></i>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-black heading mb-2">通販一切なし！</h3>
+                        <p class="text-lg md:text-xl font-bold">
+                            「欲しけりゃ店に来い！」<br/>
+                            <span class="text-white">※配送等はやってません。熱量と共に持ち帰ってください。</span>
+                        </p>
+                    </div>
+
+                    <a href="#access" class="group bg-red-600 text-white text-xl font-black px-12 py-5 border-4 border-black shadow-[6px_6px_0px_0px_#000] hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_#000] hover:bg-white hover:text-red-600 transition-all flex items-center gap-3">
+                        <span class="heading">店舗の場所を確認する</span>
+                        <i data-lucide="arrow-right" class="group-hover:translate-x-2 transition-transform" stroke-width="3"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Access Section -->
+        <section id="access" class="py-24 bg-zinc-900 text-white border-t-8 border-yellow-400">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row gap-12">
+                    <div class="w-full md:w-1/2">
+                        <h2 class="text-5xl font-black mb-8 heading text-yellow-400 drop-shadow-md">アクセス</h2>
+                        
+                        <div class="space-y-8">
+                            <div class="flex items-start gap-4 p-4 bg-zinc-800 rounded-lg border-l-4 border-red-600">
+                                <i data-lucide="map-pin" class="text-red-500 mt-1 flex-shrink-0 w-8 h-8"></i>
+                                <div>
+                                    <h3 class="text-xl font-bold mb-1 heading">場所</h3>
+                                    <p class="text-gray-300 font-medium">
+                                        〒150-0001<br />
+                                        東京都渋谷区ラーメンストリート1-23-4
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4 p-4 bg-zinc-800 rounded-lg border-l-4 border-red-600">
+                                <i data-lucide="clock" class="text-red-500 mt-1 flex-shrink-0 w-8 h-8"></i>
+                                <div>
+                                    <h3 class="text-xl font-bold mb-1 heading">営業時間</h3>
+                                    <div class="grid grid-cols-2 gap-x-8 gap-y-2 text-gray-300 font-medium">
+                                        <span class="text-yellow-400 font-bold">月 - 金</span>
+                                        <span>11:00 - 15:00 / 17:00 - 23:00</span>
+                                        <span class="text-yellow-400 font-bold">土 - 日</span>
+                                        <span>11:00 - 23:00 (通し営業)</span>
+                                    </div>
+                                    <p class="text-sm text-red-400 mt-2 font-bold">※スープ切れ次第終了！急げ！</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4 p-4 bg-zinc-800 rounded-lg border-l-4 border-red-600">
+                                <i data-lucide="phone" class="text-red-500 mt-1 flex-shrink-0 w-8 h-8"></i>
+                                <div>
+                                    <h3 class="text-xl font-bold mb-1 heading">連絡先</h3>
+                                    <p class="text-gray-300 font-bold text-lg">03-1234-5678</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/2 h-[400px] bg-white relative border-4 border-white shadow-xl rounded-xl overflow-hidden">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.7479754683745!2d139.7016358!3d35.658034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b563b000001%3A0x4564af4564af4564!2sShibuya%20Station!5e0!3m2!1sen!2sjp!4v1620000000000!5m2!1sen!2sjp" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0" 
+                            allowfullscreen="" 
+                            loading="lazy"
+                            title="Map"
+                        ></iframe>
+                        <div class="absolute top-4 right-4 bg-red-600 text-white px-6 py-3 border-2 border-white shadow-lg transform rotate-3">
+                            <span class="text-sm font-black heading">ここだ！！</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12 border-t border-zinc-800">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <h2 class="text-3xl font-black text-white heading tracking-widest mb-2">サウンドオブヌードル</h2>
+                <p class="text-sm text-gray-500 font-bold">© 2024 SOUND OF NOODLE INC. All Rights Reserved.</p>
+            </div>
+            <div class="flex gap-6">
+                <a href="#" class="bg-white text-black p-3 rounded-full hover:bg-red-600 hover:text-white transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                <a href="#" class="bg-white text-black p-3 rounded-full hover:bg-red-600 hover:text-white transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                <a href="#" class="bg-white text-black p-3 rounded-full hover:bg-red-600 hover:text-white transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Scroll Logic
+        const navbar = document.getElementById('navbar');
+        const navTextElements = document.querySelectorAll('.nav-text');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const logoAccent = document.getElementById('logo-accent');
+        const mobileLines = document.querySelectorAll('.mobile-line');
+        const mobileAccent = document.getElementById('mobile-accent');
+
+        window.addEventListener('scroll', () => {
+            const isScrolled = window.scrollY > 50;
+            
+            if (isScrolled) {
+                // Navbar Background
+                navbar.classList.remove('bg-transparent', 'py-6');
+                navbar.classList.add('bg-white', 'shadow-lg', 'py-3');
+                
+                // Text Colors (Logos etc.)
+                navTextElements.forEach(el => {
+                    el.classList.remove('text-white');
+                    el.classList.add('text-black');
+                });
+
+                // Nav Links
+                navLinks.forEach(el => {
+                    el.classList.remove('text-white', 'hover:text-yellow-400');
+                    el.classList.add('text-black', 'hover:text-red-600');
+                });
+
+                // Logo Accent "オブ"
+                logoAccent.classList.remove('text-yellow-400');
+                logoAccent.classList.add('text-red-600');
+
+                // Mobile Menu Lines
+                mobileLines.forEach(el => {
+                    el.classList.remove('bg-white');
+                    el.classList.add('bg-black');
+                });
+                mobileAccent.classList.remove('bg-yellow-400');
+                mobileAccent.classList.add('bg-red-600');
+
+            } else {
+                // Navbar Background
+                navbar.classList.add('bg-transparent', 'py-6');
+                navbar.classList.remove('bg-white', 'shadow-lg', 'py-3');
+                
+                // Text Colors
+                navTextElements.forEach(el => {
+                    el.classList.add('text-white');
+                    el.classList.remove('text-black');
+                });
+
+                // Nav Links
+                navLinks.forEach(el => {
+                    el.classList.add('text-white', 'hover:text-yellow-400');
+                    el.classList.remove('text-black', 'hover:text-red-600');
+                });
+
+                // Logo Accent "オブ"
+                logoAccent.classList.add('text-yellow-400');
+                logoAccent.classList.remove('text-red-600');
+
+                // Mobile Menu Lines
+                mobileLines.forEach(el => {
+                    el.classList.add('bg-white');
+                    el.classList.remove('bg-black');
+                });
+                mobileAccent.classList.add('bg-yellow-400');
+                mobileAccent.classList.remove('bg-red-600');
+            }
+        });
+    </script>
+</body>
+</html>
